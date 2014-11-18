@@ -1,0 +1,55 @@
+#/bin/bash
+
+usage() {
+	echo "
+	A simple Task Manager
+	usage:
+	$0 OPTION
+	OPTION is:
+	-n	task name
+	-d	task descripton
+	-v	view unfinish task
+	-a	view all task
+	-f	task is done
+	-h	help"
+	exit;
+}
+
+# define database
+db='tasks.db3'
+
+if [[ "$#" -lt "1" ]]; then
+	usage
+fi
+
+while getopts "n:d:vaf:h" opt; do
+  case $opt in
+    n)
+      name="$OPTARG"
+      ;;
+    d)
+      des="$OPTARG"
+      ;;
+    v)
+      sqlite3 ~/$db "SELECT * FROM tasks WHERE status=0 AND end=0;"
+      ;;
+    a)
+      sqlite3 ~/$db "SELECT * FROM tasks LIMIT 50;"
+      ;;
+    f)
+      sqlite3 ~/$db "UPDATE tasks SET status = 1 , end = CURRENT_TIMESTAMP WHERE id = $OPTARG AND end = 0;"
+      ;;
+    h|*)
+	usage
+      ;;
+  esac
+done
+
+if [[ ! -z $name && ! -z $des ]]; then
+	sqlite3 ~/$db "INSERT INTO tasks (name,comment) VALUES ('$name','$des');"
+elif [[ -z $name && -z $des ]]; then
+	exit;
+else
+	echo "You have to set value for name and description"
+fi
+

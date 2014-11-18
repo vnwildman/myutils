@@ -1,0 +1,76 @@
+#/bin/bash
+
+wz() {
+	git clone "git://git.gnome.org/$1"
+	cd $1
+	git remote set-url origin "ssh://tnquan@git.gnome.org/git/$1";
+	exit;
+}
+
+usage() {
+	echo "usage:
+	$0 OPTION
+	OPTION is:
+	-f	browser Debian sid package
+	-b	report bug
+	-t	download pot file from master branch
+	-s	download pot file from stable branch
+	-p	download po file from master branch
+	-i	browser git repo on official domain
+	-u	browser on github.com
+	-w	wizard
+	-H	go to Homepage
+	-h	help
+
+Project infomations:
+
+# Copyright © 2014 GNOME i18n Project for Vietnamese.
+# This file is distributed under the same license as the PACKAGE package.
+Vietnamese <gnome-vi-list@gnome.org>
+Nhóm Việt hóa GNOME <https://l10n.gnome.org/teams/vi/>
+"
+	exit;
+}
+
+# define stable branch
+stable='gnome-3-14'
+
+if [[ "$#" -lt "1" ]]; then
+	usage
+fi
+
+while getopts "f:b:t:s:p:i:u:w:hH" opt; do
+  case $opt in
+    f)
+      firefox https://packages.debian.org/sid/$OPTARG
+      ;;
+    t)
+      wget https://l10n.gnome.org/POT/$OPTARG.master/$OPTARG.master.pot
+      ;;
+    s)
+      wget https://l10n.gnome.org/POT/$OPTARG.$stable/$OPTARG.$stable.pot
+      ;;
+    p)
+      wget https://l10n.gnome.org/POT/$OPTARG.master/$OPTARG.master.vi.po
+      ;;
+    b)
+      firefox https://bugzilla.gnome.org/enter_bug.cgi?product=$OPTARG
+      ;;
+    i)
+      firefox https://git.gnome.org/browse/$OPTARG/
+      ;;
+    u)
+      firefox https://github.com/GNOME/$OPTARG/
+      ;;
+    w)
+      wz $OPTARG
+      ;;
+    H)
+		firefox https://l10n.gnome.org/teams/vi/
+      ;;
+    h|*)
+	usage
+      ;;
+  esac
+done
+

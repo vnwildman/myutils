@@ -1,0 +1,15 @@
+#!/bin/bash
+dir='/usr/share/locale/vi/LC_MESSAGES'
+umask 0022
+usage (){
+	echo $0 [[Packagename] [Pofile]]
+}
+po=`ls *vi.po`
+case "$#" in
+	0 )  pkgname=$(basename `pwd`);;
+	1 )  pkgname=$1;;
+	2 )  pkgname=$1; po=$2;;
+	* )  usage; exit;;
+esac
+mo=$dir/$pkgname.mo
+msgfmt --statistics --verbose --check -o $mo $po

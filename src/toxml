@@ -1,0 +1,12 @@
+#!/bin/bash
+. $1
+
+echo '<?xml version="1.0" encoding="utf-8"?>'
+echo '<config>'
+
+hostname=$(echo $hostname | sed 's/>/&/g;')
+echo "<hostname>$hostname</hostname>"
+
+echo "<port>$port</port>"
+
+echo '</config>'

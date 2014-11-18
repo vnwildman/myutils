@@ -1,0 +1,22 @@
+Source: myutils
+Section: dev
+Priority: extra
+Maintainer: Trần Ngọc Quân <vnwildman@gmail.com>
+Build-Depends: debhelper (>= 8.0.0), autotools-dev
+Standards-Version: 3.9.4
+Homepage: http://vnwildman@users.sourceforge.net/
+#Vcs-Git: git://git.debian.org/collab-maint/myutils.git
+#Vcs-Browser: http://git.debian.org/?p=collab-maint/myutils.git;a=summary
+
+Package: myutils
+Architecture: all
+Depends: bash, sqlite3, coreutils
+Description: Local maintain scripts
+ * mydict: my own dictionary
+ * bk: Create backup
+ * gnome: GNOME utils
+ * ubk: Remove backup file(s)
+ * hidden: Hide a file
+ * xrp: Replace quote for po file
+ * tm: Simple task manager
+ * tong: Caculate sum from stdin

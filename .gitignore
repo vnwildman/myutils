@@ -1,0 +1,16 @@
+missing
+install-sh
+configure
+Makefile
+*.log
+*.in
+*.m4
+*.log
+*.cache
+*.status
+ChangeLog
+README
+INSTALL
+AUTHORS
+COPYING
+NEWS

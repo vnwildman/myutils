@@ -1,0 +1,47 @@
+#!/bin/bash
+mode='n'
+usage() {
+	echo "usage: $0 -m MODE -f FILENAME
+	      MODE are:
+	      \t-a replace all
+	      \t-n new only
+	      -h help"
+	exit;
+}
+
+if [ "$#" == "1" ]; then usage
+fi
+
+while getopts ":f:m:i:h" opt; do
+  case $opt in
+    m)
+      mode="$OPTARG"
+      ;;
+    i)
+      i="--indent"
+      ;;
+    f)
+      f="$OPTARG"
+      ;;
+    h|*)
+	usage
+      ;;
+  esac
+done
+
+echo "Filename: $f"
+echo "Mode=$mode"
+des=$f.po
+seddir=/usr/share/doc/myutils/xrp
+
+case $mode in
+	a)
+		msgfilter $i --input=$f --output-file=$des sed -f $seddir/QUOTES.old
+		diff $des $f
+		;;
+	n)
+		msgfilter $i --input=$f --output-file=$des sed  -f $seddir/QUOTES.new
+		diff $des $f
+		;;
+esac
+

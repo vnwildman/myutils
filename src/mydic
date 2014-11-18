@@ -1,0 +1,32 @@
+#!/bin/sh
+word='english'
+dict='/home/tnquan/dictionary.db3'
+
+if [ $# = 0 ] ; then
+	while [ 1 ] ; do
+		echo "+----------------------------------------+"
+		echo -n "-> Enter the word for search or q to exit:"
+		read word;
+		if [ "$word" = "q" ] ; then
+			break
+		fi
+		echo "=================="
+		echo "Results for $word:"
+		result=$(sqlite3 $dict "SELECT vi FROM envi WHERE en LIKE '$word' LIMIT 0,3;")
+		if [ "$result" = "" ] ; then
+			echo "\"$word\" not found!"
+		else
+			echo $result
+		fi
+	done
+	exit
+fi
+
+result=$(sqlite3 $dict "SELECT vi FROM envi WHERE en LIKE '$*' LIMIT 0,3;")
+if [ "$result" = "" ] ; then
+	echo "\"$*\" not found!"
+else
+	echo $result
+fi
+exit
+

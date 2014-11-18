@@ -1,0 +1,15 @@
+#!/bin/sh
+usage() {
+	echo "Usage: $0 [DIR]"
+	exit -1
+}
+if [ $# -eq 0 ] ; then
+	usage
+fi
+
+if [ -d $1 ]; then
+	rm -v $1/*~
+else
+	rm -v $1
+fi
+

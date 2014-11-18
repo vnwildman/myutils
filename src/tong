@@ -1,0 +1,4 @@
+#!/bin/bash
+sum=0
+while read val; do sum=`expr $sum + $val` ; done
+echo $sum 
