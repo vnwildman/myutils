@@ -4,6 +4,8 @@ wz() {
 	git clone "git://git.gnome.org/$1"
 	cd $1
 	git remote set-url origin "ssh://tnquan@git.gnome.org/git/$1";
+	cd po
+	gnome -t $1
 	exit;
 }
 
@@ -27,8 +29,7 @@ Project infomations:
 # Copyright © 2014 GNOME i18n Project for Vietnamese.
 # This file is distributed under the same license as the PACKAGE package.
 Vietnamese <gnome-vi-list@gnome.org>
-Nhóm Việt hóa GNOME <https://l10n.gnome.org/teams/vi/>
-"
+Nhóm Việt hóa GNOME (https://l10n.gnome.org/teams/vi/)"
 	exit;
 }
 

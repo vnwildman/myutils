@@ -37,7 +37,7 @@ while getopts "n:d:vaf:h" opt; do
       sqlite3 ~/$db "SELECT * FROM tasks LIMIT 50;"
       ;;
     f)
-      sqlite3 ~/$db "UPDATE tasks SET status = 1 , end = CURRENT_TIMESTAMP WHERE id = $OPTARG AND end = 0;"
+      sqlite3 ~/$db "UPDATE tasks SET status=1 , end=CURRENT_TIMESTAMP WHERE id = '$OPTARG' AND end=0;"
       ;;
     h|*)
 	usage
@@ -45,9 +45,9 @@ while getopts "n:d:vaf:h" opt; do
   esac
 done
 
-if [[ ! -z $name && ! -z $des ]]; then
+if [[ ! -z "$name" && ! -z "$des" ]]; then
 	sqlite3 ~/$db "INSERT INTO tasks (name,comment) VALUES ('$name','$des');"
-elif [[ -z $name && -z $des ]]; then
+elif [[ -z "$name" && -z "$des" ]]; then
 	exit;
 else
 	echo "You have to set value for name and description"
