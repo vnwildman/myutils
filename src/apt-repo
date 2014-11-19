@@ -1,0 +1,22 @@
+#!/bin/sh
+str="deb "$(zenity --forms --title="Add Debian repo" \
+	--text="Enter information about your Debian repo." \
+	--separator=" " \
+	--add-entry="URIs:" \
+	--add-entry="Suites:" \
+	--add-entry="Sections:")
+
+case $? in
+    0)
+        echo $str
+    ;;
+    1)
+        echo "No repo added."
+	;;
+    -1)
+		zenity --notification\
+		--window-icon="info" \
+		--text="An unexpected error has occurred."
+	;;
+esac
+

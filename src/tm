@@ -2,8 +2,8 @@
 
 usage() {
 	echo "
-	A simple Task Manager
-	usage:
+A simple Task Manager
+usage:
 	$0 OPTION
 	OPTION is:
 	-n	task name
@@ -11,7 +11,8 @@ usage() {
 	-v	view unfinish task
 	-a	view all task
 	-f	task is done
-	-h	help"
+	-h	help
+Power by <http://sqlite.org>"
 	exit;
 }
 
@@ -31,13 +32,13 @@ while getopts "n:d:vaf:h" opt; do
       des="$OPTARG"
       ;;
     v)
-      sqlite3 ~/$db "SELECT * FROM tasks WHERE status=0 AND end=0;"
+      sqlite3 -line ~/$db "SELECT T.id,T.name,T.comment,S.name AS status,datetime(start,'localtime') AS start FROM tasks AS T INNER JOIN status AS S ON T.status = S.id WHERE status=0 AND end=0;"
       ;;
     a)
-      sqlite3 ~/$db "SELECT * FROM tasks LIMIT 50;"
+      sqlite3 ~/$db "SELECT T.id,T.name,T.comment,S.name AS status,start,end FROM tasks AS T INNER JOIN status AS S ON T.status = S.id LIMIT 50;"
       ;;
     f)
-      sqlite3 ~/$db "UPDATE tasks SET status=1 , end=CURRENT_TIMESTAMP WHERE id = '$OPTARG' AND end=0;"
+      sqlite3 -line ~/$db "UPDATE tasks SET status=1 , end=CURRENT_TIMESTAMP WHERE id = '$OPTARG' AND end=0; SELECT * FROM tasks WHERE id = '$OPTARG';"
       ;;
     h|*)
 	usage
