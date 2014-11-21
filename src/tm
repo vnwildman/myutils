@@ -6,9 +6,10 @@ A simple Task Manager
 usage:
 	$0 OPTION
 	OPTION is:
-	-n	task name
-	-d	task descripton
-	-v	view unfinish task
+	-n	task's name
+	-d	task's descripton
+	-u	view unfinished task
+	-i	view finished task
 	-a	view all task
 	-f	task is done
 	-h	help
@@ -23,7 +24,7 @@ if [[ "$#" -lt "1" ]]; then
 	usage
 fi
 
-while getopts "n:d:vaf:h" opt; do
+while getopts "n:d:uiaf:h" opt; do
   case $opt in
     n)
       name="$OPTARG"
@@ -31,8 +32,11 @@ while getopts "n:d:vaf:h" opt; do
     d)
       des="$OPTARG"
       ;;
-    v)
-      sqlite3 -line ~/$db "SELECT T.id,T.name,T.comment,S.name AS status,datetime(start,'localtime') AS start FROM tasks AS T INNER JOIN status AS S ON T.status = S.id WHERE status=0 AND end=0;"
+    u)
+      sqlite3 -line ~/$db "SELECT T.id,T.name,T.comment,datetime(start,'localtime') AS start FROM tasks AS T INNER JOIN status AS S ON T.status = S.id WHERE status=0 AND end=0;"
+      ;;
+    i)
+      sqlite3 -line ~/$db "SELECT T.id,T.name,T.comment,datetime(start,'localtime') AS start ,datetime(end,'localtime') AS end FROM tasks AS T INNER JOIN status AS S ON T.status = S.id WHERE status=1;"
       ;;
     a)
       sqlite3 ~/$db "SELECT T.id,T.name,T.comment,S.name AS status,start,end FROM tasks AS T INNER JOIN status AS S ON T.status = S.id LIMIT 50;"
@@ -51,6 +55,6 @@ if [[ ! -z "$name" && ! -z "$des" ]]; then
 elif [[ -z "$name" && -z "$des" ]]; then
 	exit;
 else
-	echo "You have to set value for name and description"
+	echo "You have to set value for both name and description"
 fi
 
