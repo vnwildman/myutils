@@ -2,14 +2,19 @@
 dir='/usr/share/locale/vi/LC_MESSAGES'
 umask 0022
 usage (){
-	echo $0 [[Packagename] [Pofile]]
+	echo $0 [[domain] [file.po]]
+	exit
 }
-po=`ls *vi.po`
+po=$(ls *vi.po)
 case "$#" in
-	0 )  pkgname=$(basename `pwd`);;
+	0 )  if [[ $(basename `pwd`) != "po" ]]; then pkgname=$(basename `pwd`); else usage; fi;;
 	1 )  pkgname=$1;;
 	2 )  pkgname=$1; po=$2;;
-	* )  usage; exit;;
+	* )  usage;;
 esac
 mo=$dir/$pkgname.mo
-msgfmt --statistics --verbose --check -o $mo $po
+msgattrib --translated $po > t.t
+msgattrib --obsolete $po > t.o
+msgcat t.t t.o > t.po
+msgfmt --statistics --verbose --check -o $mo t.po
+rm -v t.t t.o t.po
