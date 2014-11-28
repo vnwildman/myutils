@@ -3,7 +3,8 @@
 wz() {
 	git clone "git://git.gnome.org/$1"
 	cd $1
-	git remote set-url origin "ssh://tnquan@git.gnome.org/git/$1";
+	git remote set-url origin "ssh://git.gnome.org/git/$1";
+	git remote add official git://git.gnome.org/$1 && git fetch official
 	cd po
 	gnome -t $1
 	exit;
@@ -19,6 +20,7 @@ usage() {
 	-s	download pot file from stable branch
 	-p	download po file from master branch
 	-i	browser git repo on official domain
+	-g	add official git repo by git:// protocol
 	-u	browser on github.com
 	-w	wizard
 	-H	go to Homepage
@@ -29,7 +31,12 @@ Project infomations:
 # Copyright © 2014 GNOME i18n Project for Vietnamese.
 # This file is distributed under the same license as the PACKAGE package.
 Vietnamese <gnome-vi-list@gnome.org>
-Nhóm Việt hóa GNOME (https://l10n.gnome.org/teams/vi/)"
+Nhóm Việt hóa GNOME (https://l10n.gnome.org/teams/vi/)
+
+Git:
+ * git://git.gnome.org/PACKAGE
+ * ssh://git.gnome.org/git/PACKAGE
+"
 	exit;
 }
 
@@ -40,7 +47,7 @@ if [[ "$#" -lt "1" ]]; then
 	usage
 fi
 
-while getopts "f:b:t:s:p:i:u:w:hH" opt; do
+while getopts "f:b:t:s:p:i:g:u:w:hH" opt; do
   case $opt in
     f)
       firefox https://packages.debian.org/sid/$OPTARG
@@ -60,6 +67,9 @@ while getopts "f:b:t:s:p:i:u:w:hH" opt; do
     i)
       firefox https://git.gnome.org/browse/$OPTARG/
       ;;
+    g)
+      git remote add official git://git.gnome.org/$OPTARG && git fetch official
+    ;;
     u)
       firefox https://github.com/GNOME/$OPTARG/
       ;;
