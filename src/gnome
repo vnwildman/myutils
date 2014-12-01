@@ -23,6 +23,8 @@ usage() {
 	-g	add official git repo by git:// protocol
 	-u	browser on github.com
 	-w	wizard
+	-G	Go to git directory
+	-W	go to Wiki of package
 	-H	go to Homepage
 	-h	help
 
@@ -47,7 +49,7 @@ if [[ "$#" -lt "1" ]]; then
 	usage
 fi
 
-while getopts "f:b:t:s:p:i:g:u:w:hH" opt; do
+while getopts "f:b:t:s:p:i:g:u:w:G:W:hH" opt; do
   case $opt in
     f)
       firefox https://packages.debian.org/sid/$OPTARG
@@ -62,22 +64,28 @@ while getopts "f:b:t:s:p:i:g:u:w:hH" opt; do
       wget --timestamping https://l10n.gnome.org/POT/$OPTARG.master/$OPTARG.master.vi.po
       ;;
     b)
-      firefox https://bugzilla.gnome.org/enter_bug.cgi?product=$OPTARG
+      firefox https://bugzilla.gnome.org/enter_bug.cgi?product=$OPTARG &
       ;;
     i)
-      firefox https://git.gnome.org/browse/$OPTARG/
+      firefox https://git.gnome.org/browse/$OPTARG/ &
       ;;
     g)
       git remote add official git://git.gnome.org/$OPTARG && git fetch official
     ;;
     u)
-      firefox https://github.com/GNOME/$OPTARG/
+      firefox https://github.com/GNOME/$OPTARG/ &
       ;;
     w)
       wz $OPTARG
       ;;
+    W)
+      firefox https://wiki.gnome.org/Apps/$OPTARG &
+      ;;
+    G)
+      cd /mnt/E/MyProjects/GNOME/$OPTARG
+      ;;
     H)
-		firefox https://l10n.gnome.org/teams/vi/
+	  firefox https://l10n.gnome.org/teams/vi/
       ;;
     h|*)
 	usage

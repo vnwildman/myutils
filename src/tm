@@ -1,30 +1,30 @@
 #/bin/bash
 
 usage() {
-	echo "
-A simple Task Manager
+	echo "A simple Task Manager
 usage:
 	$0 OPTION
 	OPTION is:
 	-n	task's name
 	-d	task's descripton
-	-u	view unfinished task
-	-i	view finished task
-	-a	view all task
+	-u	view Unfinished task
+	-i	view fInished task
+	-a	view All task
 	-f	task is done
+	-c	Cancel a task
 	-h	help
 Power by <http://sqlite.org>"
 	exit;
 }
 
-# define database
+# define database name
 db='tasks.db3'
 
 if [[ "$#" -lt "1" ]]; then
 	usage
 fi
 
-while getopts "n:d:uiaf:h" opt; do
+while getopts "n:d:uiaf:c:h" opt; do
   case $opt in
     n)
       name="$OPTARG"
@@ -43,6 +43,9 @@ while getopts "n:d:uiaf:h" opt; do
       ;;
     f)
       sqlite3 -line ~/$db "UPDATE tasks SET status=1 , end=CURRENT_TIMESTAMP WHERE id = '$OPTARG' AND end=0; SELECT * FROM tasks WHERE id = '$OPTARG';"
+      ;;
+    c)
+      sqlite3 -line ~/$db "UPDATE tasks SET status=2 , end=CURRENT_TIMESTAMP WHERE id = '$OPTARG' AND end=0; SELECT * FROM tasks WHERE id = '$OPTARG';"
       ;;
     h|*)
 	usage
