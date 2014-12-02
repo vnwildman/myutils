@@ -23,7 +23,6 @@ usage() {
 	-g	add official git repo by git:// protocol
 	-u	browser on github.com
 	-w	wizard
-	-G	Go to git directory
 	-W	go to Wiki of package
 	-H	go to Homepage
 	-h	help
@@ -49,7 +48,7 @@ if [[ "$#" -lt "1" ]]; then
 	usage
 fi
 
-while getopts "f:b:t:s:p:i:g:u:w:G:W:hH" opt; do
+while getopts "f:b:t:s:p:i:g:u:w:W:hH" opt; do
   case $opt in
     f)
       firefox https://packages.debian.org/sid/$OPTARG
@@ -80,9 +79,6 @@ while getopts "f:b:t:s:p:i:g:u:w:G:W:hH" opt; do
       ;;
     W)
       firefox https://wiki.gnome.org/Apps/$OPTARG &
-      ;;
-    G)
-      cd /mnt/E/MyProjects/GNOME/$OPTARG
       ;;
     H)
 	  firefox https://l10n.gnome.org/teams/vi/
