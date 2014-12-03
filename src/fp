@@ -1,0 +1,16 @@
+#!/bin/bash
+usage () {
+	echo "usage: $0 parttent"
+	echo "example: $0 \"[a-zA-Z]% \""
+	exit -1
+}
+dir='/mnt/E/TranslationProject'
+fl=$(find $dir -name *vi.po)
+if [ -n "$1" ]; then
+	s=$1
+else
+	usage
+fi
+for po in $fl ; do
+	msggrep -K -e "$s" $po
+done

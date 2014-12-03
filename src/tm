@@ -54,7 +54,7 @@ while getopts "n:d:uiaf:c:h" opt; do
 done
 
 if [[ ! -z "$name" && ! -z "$des" ]]; then
-	sqlite3 ~/$db "INSERT INTO tasks (name,comment) VALUES ('$name','$des');"
+	sqlite3 ~/$db -line "INSERT INTO tasks (name,comment) VALUES ('$name','$des');; SELECT * FROM tasks WHERE id = last_insert_rowid();"
 elif [[ -z "$name" && -z "$des" ]]; then
 	exit;
 else
