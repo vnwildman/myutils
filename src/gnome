@@ -4,7 +4,7 @@ wz() {
 	git clone "git://git.gnome.org/$1"
 	cd $1
 	git remote set-url origin "ssh://git.gnome.org/git/$1";
-	git remote add official git://git.gnome.org/$1 && git fetch official
+	git remote add git git://git.gnome.org/$1 && git fetch git
 	cd po
 	gnome -t $1
 	exit;
@@ -19,9 +19,10 @@ usage() {
 	-t	download pot file from master branch
 	-s	download pot file from stable branch
 	-p	download po file from master branch
-	-i	browser git repo on official domain
-	-g	add official git repo by git:// protocol
+	-i	browser git repo on git.debian.org
+	-g	add 'git' repo using git:// protocol
 	-u	browser on github.com
+	-U	merge vi.po with POT file at the same directory
 	-w	wizard
 	-W	go to Wiki of package
 	-H	go to Homepage
@@ -44,17 +45,29 @@ Git:
 # define stable branch
 stable='gnome-3-14'
 
+# get parent dir
+# cd ../
+# parent=$(basename `pwd`)
+# cd -
+
+pushd $(pwd)
+cd ../
+parent=$(basename `pwd`)
+popd
+
 if [[ "$#" -lt "1" ]]; then
 	usage
 fi
 
-while getopts "f:b:t:s:p:i:g:u:w:W:hH" opt; do
+while getopts "f:b:t:s:p:i:g:u:Uw:W:hH" opt; do
   case $opt in
     f)
       firefox https://packages.debian.org/sid/$OPTARG
       ;;
     t)
+      rm -v *.pot *~
       wget --timestamping https://l10n.gnome.org/POT/$OPTARG.master/$OPTARG.master.pot
+      msgmerge --verbose --update vi.po $OPTARG.master.pot
       ;;
     s)
       wget --timestamping https://l10n.gnome.org/POT/$OPTARG.$stable/$OPTARG.$stable.pot
@@ -69,10 +82,13 @@ while getopts "f:b:t:s:p:i:g:u:w:W:hH" opt; do
       firefox https://git.gnome.org/browse/$OPTARG/ &
       ;;
     g)
-      git remote add official git://git.gnome.org/$OPTARG && git fetch official
+      git remote add git git://git.gnome.org/$1 && git fetch git
     ;;
     u)
       firefox https://github.com/GNOME/$OPTARG/ &
+      ;;
+    U)
+      msgmerge --verbose --update vi.po *.pot
       ;;
     w)
       wz $OPTARG

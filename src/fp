@@ -1,16 +1,32 @@
 #!/bin/bash
 usage () {
-	echo "usage: $0 parttent"
-	echo "example: $0 \"[a-zA-Z]% \""
+	echo "usage: $0 -[t|g] -s SEARCH_STRING
+	-t	search in TranslationProject
+	-g	search in GNOME"
+
 	exit -1
 }
-dir='/mnt/E/TranslationProject'
-fl=$(find $dir -name *vi.po)
-if [ -n "$1" ]; then
-	s=$1
-else
+while getopts "tghs:" opt; do
+  case $opt in
+    d)
+      dir='/mnt/E/TranslationProject'
+      ;;
+    g)
+      dir='/mnt/E/MyProjects/GNOME/*/po/'
+      ;;
+    s)
+	  s=$OPTARG
+      ;;
+    h|*)
+	usage
+      ;;
+  esac
+done
+
+if [[ "$#" -lt "1" ]]; then
 	usage
 fi
-for po in $fl ; do
+for po in $(find $dir -name *vi.po); do
 	msggrep -K -e "$s" $po
 done
+
