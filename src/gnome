@@ -21,10 +21,12 @@ usage() {
 	-p	download po file from master branch
 	-i	browser git repo on git.debian.org
 	-g	add 'git' repo using git:// protocol
+	-G	browser GNOME directory in Nautilus
 	-u	browser on github.com
 	-U	merge vi.po with POT file at the same directory
 	-w	wizard
 	-W	go to Wiki of package
+	-m	go to module page
 	-H	go to Homepage
 	-h	help
 
@@ -44,22 +46,25 @@ Git:
 
 # define stable branch
 stable='gnome-3-14'
+projectdir='/mnt/E/MyProjects/GNOME'
 
 # get parent dir
+getdir () {
 # cd ../
 # parent=$(basename `pwd`)
 # cd -
 
-pushd $(pwd)
-cd ../
-parent=$(basename `pwd`)
-popd
+	pushd $(pwd)
+	cd ../
+	parent=$(basename `pwd`)
+	popd
+}
 
 if [[ "$#" -lt "1" ]]; then
 	usage
 fi
 
-while getopts "f:b:t:s:p:i:g:u:Uw:W:hH" opt; do
+while getopts "f:b:t:s:p:i:g:Gu:Uw:W:m:hH" opt; do
   case $opt in
     f)
       firefox https://packages.debian.org/sid/$OPTARG
@@ -82,8 +87,11 @@ while getopts "f:b:t:s:p:i:g:u:Uw:W:hH" opt; do
       firefox https://git.gnome.org/browse/$OPTARG/ &
       ;;
     g)
-      git remote add git git://git.gnome.org/$1 && git fetch git
+      git remote add git git://git.gnome.org/$OPTARG && git fetch git
     ;;
+    G)
+      nautilus $projectdir &
+      ;;
     u)
       firefox https://github.com/GNOME/$OPTARG/ &
       ;;
@@ -95,6 +103,9 @@ while getopts "f:b:t:s:p:i:g:u:Uw:W:hH" opt; do
       ;;
     W)
       firefox https://wiki.gnome.org/Apps/$OPTARG &
+      ;;
+    m)
+      firefox https://l10n.gnome.org/module/$OPTARG &
       ;;
     H)
 	  firefox https://l10n.gnome.org/teams/vi/
