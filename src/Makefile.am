@@ -1,5 +1,5 @@
-dist_bin_SCRIPTS = apt-repo bk fp gnome ubk mydic xrp hidden tong tm ud
+dist_bin_SCRIPTS = apt-repo bk fp gnome ubk mydic xrp hidden tong tm ud vnconv
 
 seddir = $(docdir)/xrp
-sed_DATA = QUOTES.old QUOTES.new
+sed_DATA = QUOTES.old QUOTES.new moi_cu
 EXTRA_DIST = $(sed_DATA)

@@ -1,0 +1,4 @@
+#!/bin/bash
+seddir=/usr/share/doc/myutils/xrp
+sed -f $seddir/moi_cu $1 > t
+diff t $1
