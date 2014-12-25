@@ -40,12 +40,8 @@ def daukieucu(input_str):
     return PAT_DAUKIEUMOI.sub(sub_kieucu, input_str)
 
 if __name__ == '__main__':
-#    a = 'hoả Hoả HOẢ HOả quả Quả huỷ huỳ huý quý huỵnh huỳnh quýnh tuýn hoá hoản'
-#    b = daukieucu(a)
-#    print(a)
-#    print(b)
     script, filename = argv
-    txt = open(filename)
-    buffer = txt.read()
-    print(daukieucu(buffer))
+    fd = open(filename, 'r')
+    for line in fd:
+        print(daukieucu(line))
 
