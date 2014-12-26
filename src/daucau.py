@@ -44,4 +44,5 @@ if __name__ == '__main__':
     fd = open(filename, 'r')
     for line in fd:
         print(daukieucu(line))
+    fd.close()
 
