@@ -43,6 +43,6 @@ if __name__ == '__main__':
     script, filename = argv
     fd = open(filename, 'r')
     for line in fd:
-        print(daukieucu(line))
+        print(daukieucu(line), end="")
     fd.close()
 
