@@ -7,6 +7,7 @@ usage:
 	OPTION is:
 	-n	task's name
 	-d	task's descripton
+	-v	verbose mode
 	-l	Limit item
 	-u	view Unfinished task
 	-i	view fInished task
@@ -45,8 +46,12 @@ fi
 
 limit=50;
 
-while getopts "n:d:l:uiaf:c:h" opt; do
+while getopts "vn:d:l:uiaf:c:h" opt; do
   case $opt in
+  
+    v)
+     verbose=1
+     ;;
     n)
       name="$OPTARG"
       ;;
@@ -57,7 +62,11 @@ while getopts "n:d:l:uiaf:c:h" opt; do
       limit=$OPTARG
       ;;
     u)
-      sqlite3 -line ~/$db "SELECT T.id,T.name,T.comment,datetime(start,'localtime') AS start FROM tasks AS T INNER JOIN status AS S ON T.status = S.id WHERE status=0 AND end=0 LIMIT $limit;" | more
+      if [[ $verbose -eq 1 ]]; then
+      	sqlite3 -line ~/$db "SELECT T.id,T.name,T.comment,datetime(start,'localtime') AS start FROM tasks AS T INNER JOIN status AS S ON T.status = S.id WHERE status=0 AND end=0 LIMIT $limit;" | more
+      else
+      	sqlite3 ~/$db "SELECT id, name FROM tasks WHERE status=0 AND end=0 LIMIT $limit;" | more
+      fi
       ;;
     i)
       sqlite3 -line ~/$db "SELECT T.id,T.name,T.comment,datetime(start,'localtime') AS start ,datetime(end,'localtime') AS end FROM tasks AS T INNER JOIN status AS S ON T.status = S.id WHERE status=1 ORDER BY end LIMIT $limit;" | more
