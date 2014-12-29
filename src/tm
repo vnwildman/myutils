@@ -19,6 +19,14 @@ Power by <http://sqlite.org>"
 	exit;
 }
 
+unfinished(){
+  if [[ $verbose -eq 1 ]]; then
+  	sqlite3 -line ~/$db "SELECT T.id,T.name,T.comment,datetime(start,'localtime') AS start FROM tasks AS T INNER JOIN status AS S ON T.status = S.id WHERE status=0 AND end=0 LIMIT $limit;" | more
+  else
+  	sqlite3 ~/$db "SELECT id, name, comment,datetime(start,'localtime') AS start FROM tasks WHERE status=0 AND end=0 LIMIT $limit;" | more
+  fi
+}
+
 # define database name
 db='tasks.db3'
 # if database isn't esit, cretate it
@@ -62,11 +70,7 @@ while getopts "vn:d:l:uiaf:c:h" opt; do
       limit=$OPTARG
       ;;
     u)
-      if [[ $verbose -eq 1 ]]; then
-      	sqlite3 -line ~/$db "SELECT T.id,T.name,T.comment,datetime(start,'localtime') AS start FROM tasks AS T INNER JOIN status AS S ON T.status = S.id WHERE status=0 AND end=0 LIMIT $limit;" | more
-      else
-      	sqlite3 ~/$db "SELECT id, name FROM tasks WHERE status=0 AND end=0 LIMIT $limit;" | more
-      fi
+		unfinished
       ;;
     i)
       sqlite3 -line ~/$db "SELECT T.id,T.name,T.comment,datetime(start,'localtime') AS start ,datetime(end,'localtime') AS end FROM tasks AS T INNER JOIN status AS S ON T.status = S.id WHERE status=1 ORDER BY end LIMIT $limit;" | more
