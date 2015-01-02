@@ -3,18 +3,19 @@
 usage() {
 	echo "A simple Task Manager
 usage:
-	$0 OPTION
-	OPTION is:
-	-n	task's name
-	-d	task's descripton
-	-v	verbose mode
-	-l	Limit item
-	-u	view Unfinished task
-	-i	view fInished task
-	-a	view All task
-	-f	task is done
-	-c	Cancel a task
-	-h	help
+	$0 OPTIONS
+	OPTIONS are:
+	-n		name
+	-d		descripton
+	-v		verbose mode
+	-l LIMIT 	Limit item
+	-u		view Unfinished task
+	-i		view fInished task
+	-a		view All task
+	-f ID		task is done
+	-c ID		Cancel a task
+	-b FILE		Backup database
+	-h		help
 Power by <http://sqlite.org>"
 	exit;
 }
@@ -25,6 +26,10 @@ unfinished(){
   else
   	sqlite3 ~/$db "SELECT id, name, comment,datetime(start,'localtime') AS start FROM tasks WHERE status=0 AND end=0 LIMIT $limit;" | more
   fi
+}
+
+backup(){
+	sqlite3 ~/$db .dump > $1
 }
 
 # define database name
@@ -54,7 +59,7 @@ fi
 
 limit=50;
 
-while getopts "vn:d:l:uiaf:c:h" opt; do
+while getopts "vn:d:l:uiaf:c:b:h" opt; do
   case $opt in
   
     v)
@@ -83,6 +88,9 @@ while getopts "vn:d:l:uiaf:c:h" opt; do
       ;;
     c)
       sqlite3 -line ~/$db "UPDATE tasks SET status=2 , end=CURRENT_TIMESTAMP WHERE id = '$OPTARG' AND end=0; SELECT * FROM tasks WHERE id = '$OPTARG';"
+      ;;
+    b)
+      backup $OPTARG
       ;;
     h|*)
 	usage
