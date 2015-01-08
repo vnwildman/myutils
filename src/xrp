@@ -1,18 +1,20 @@
 #!/bin/bash
 mode='n'
 usage() {
-	echo "usage: $0 -m MODE -f FILENAME
-	      MODE are:
-	      \t-a replace all
-	      \t-n new only
-	      -h help"
+	echo "usage: $0 [OPTION] [-m MODE] -f FILENAME
+  OPTIONS is:
+    -i indent
+    -h help
+  MODE are:
+    a replace all
+    n new"
 	exit;
 }
 
-if [ "$#" == "1" ]; then usage
+if [ "$#" -lt "1" ]; then usage
 fi
 
-while getopts ":f:m:i:h" opt; do
+while getopts "im:f:h" opt; do
   case $opt in
     m)
       mode="$OPTARG"
@@ -29,8 +31,6 @@ while getopts ":f:m:i:h" opt; do
   esac
 done
 
-echo "Filename: $f"
-echo "Mode=$mode"
 des=$f.po
 seddir=/usr/share/doc/myutils/xrp
 

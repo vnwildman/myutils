@@ -32,7 +32,7 @@ usage() {
 
 Project infomations:
 
-# Copyright © 2014 GNOME i18n Project for Vietnamese.
+# Copyright © $(date +%Y) GNOME i18n Project for Vietnamese.
 # This file is distributed under the same license as the PACKAGE package.
 Vietnamese <gnome-vi-list@gnome.org>
 Nhóm Việt hóa GNOME (https://l10n.gnome.org/teams/vi/)
