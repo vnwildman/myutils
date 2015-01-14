@@ -22,9 +22,9 @@ Power by <http://sqlite.org>"
 
 unfinished(){
   if [[ $verbose -eq 1 ]]; then
-  	sqlite3 -line ~/$db "SELECT T.id,T.name,T.comment,datetime(start,'localtime') AS start FROM tasks AS T INNER JOIN status AS S ON T.status = S.id WHERE status=0 AND end=0 LIMIT $limit;" | more
+  	sqlite3 -line ~/$db "SELECT T.id,T.name,T.comment,datetime(start,'localtime') AS start FROM tasks AS T INNER JOIN status AS S ON T.status = S.id WHERE status=0 AND end=0 $limit;" | more
   else
-  	sqlite3 ~/$db "SELECT id, name, comment,datetime(start,'localtime') AS start FROM tasks WHERE status=0 AND end=0 LIMIT $limit;" | more
+  	sqlite3 ~/$db "SELECT id, name, comment,datetime(start,'localtime') AS start FROM tasks WHERE status=0 AND end=0 $limit;" | more
   fi
 }
 
@@ -57,7 +57,7 @@ if [[ "$#" -lt "1" ]]; then
 	usage
 fi
 
-limit=50;
+limit=''
 
 while getopts "vn:d:l:uiaf:c:b:h" opt; do
   case $opt in
@@ -72,16 +72,16 @@ while getopts "vn:d:l:uiaf:c:b:h" opt; do
       des="$OPTARG"
       ;;
     l)
-      limit=$OPTARG
+      limit="LIMIT $OPTARG"
       ;;
     u)
 		unfinished
       ;;
     i)
-      sqlite3 -line ~/$db "SELECT T.id,T.name,T.comment,datetime(start,'localtime') AS start ,datetime(end,'localtime') AS end FROM tasks AS T INNER JOIN status AS S ON T.status = S.id WHERE status=1 ORDER BY end LIMIT $limit;" | more
+      sqlite3 -line ~/$db "SELECT T.id,T.name,T.comment,datetime(start,'localtime') AS start ,datetime(end,'localtime') AS end FROM tasks AS T INNER JOIN status AS S ON T.status = S.id WHERE status=1 ORDER BY end $limit;" | more
       ;;
     a)
-      sqlite3 ~/$db "SELECT T.id,T.name,T.comment,S.name AS status,start,end FROM tasks AS T INNER JOIN status AS S ON T.status = S.id LIMIT $limit;" | more
+      sqlite3 ~/$db "SELECT T.id,T.name,T.comment,S.name AS status,start,end FROM tasks AS T INNER JOIN status AS S ON T.status = S.id $limit;" | more
       ;;
     f)
       sqlite3 -line ~/$db "UPDATE tasks SET status=1 , end=CURRENT_TIMESTAMP WHERE id = '$OPTARG' AND end=0; SELECT * FROM tasks WHERE id = '$OPTARG';"
