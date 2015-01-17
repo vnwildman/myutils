@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
 # -*- encoding: utf-8 -*-
 # Lê Quốc Tuấn <mr.lequoctuan@gmail.com>, 2014.
 # Trần Ngọc Quân <vnwildman@gmail.com>, 2014-2015.
@@ -30,6 +30,9 @@ MAPS.update(maps1)
 MAPS.update(maps2)
 MAPS.update(maps3)
 
+# Cần chỉ định là dùng unicode đối với python2
+re.UNICODE
+
 # Chỉ thay những mẫu không bắt đầu bằng q và không kết thúc bằng khoảng trắng
 # bao gồm [^\t\n\r\f\v] và lớp ký tự khoảng trắng do unicode đánh dấu.
 # Tức là còn ký tự khác nữa theo sau.
@@ -46,6 +49,7 @@ if __name__ == '__main__':
     script, filename = argv
     fd = open(filename, 'r')
     for line in fd:
-        print(daukieucu(line), end="")
+        # dùng dấu phẩy để không in thêm ký tự dòng mới
+        print daukieucu(line),
     fd.close()
 
