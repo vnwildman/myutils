@@ -30,7 +30,7 @@ MAPS.update(maps1)
 MAPS.update(maps2)
 MAPS.update(maps3)
 
-# Chỉ thay những mẫu không bắt đầu bằng q và không kết thúc bằng khoảng trắng
+# Chỉ thay những mẫu không bắt đầu bằng q và kết thúc bằng khoảng trắng
 # bao gồm [^\t\n\r\f\v] và lớp ký tự khoảng trắng do unicode đánh dấu.
 # Tức là còn ký tự khác nữa theo sau.
 PAT_DAUKIEUMOI = re.compile(r'(?<!q)(%s)(?!\S)' % '|'.join(MAPS.keys()), re.I)

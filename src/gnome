@@ -96,7 +96,11 @@ while getopts "f:b:t:s:p:i:g:Gu:Uw:W:m:hH" opt; do
       firefox https://github.com/GNOME/$OPTARG/ &
       ;;
     U)
-      msgmerge --verbose --update *vi.po *.pot
+      if [[ -f vi.po ]]; then
+      	msgmerge --verbose --update vi.po *.pot
+      else
+      	msgmerge --verbose --update *vi.po *.pot
+      fi
       ;;
     w)
       wz $OPTARG
