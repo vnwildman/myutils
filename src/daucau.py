@@ -30,10 +30,9 @@ MAPS.update(maps1)
 MAPS.update(maps2)
 MAPS.update(maps3)
 
-# Chỉ thay những mẫu không bắt đầu bằng q và kết thúc bằng khoảng trắng
-# bao gồm [^\t\n\r\f\v] và lớp ký tự khoảng trắng do unicode đánh dấu.
-# Tức là còn ký tự khác nữa theo sau.
-PAT_DAUKIEUMOI = re.compile(r'(?<!q)(%s)(?!\S)' % '|'.join(MAPS.keys()), re.I)
+# Chỉ thay khi các vần trên không có q đứng trước và nó cũng là phần kết thúc của từ.
+# Không thay nếu sau vần trên là ký tự tăng tốc [&_].
+PAT_DAUKIEUMOI = re.compile(r'(?<!q)(%s)(?![a-zA-Z&_])' % '|'.join(MAPS.keys()), re.I)
 
 def sub_kieucu(match):
     s = match.group(1)
