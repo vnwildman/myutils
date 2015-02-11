@@ -32,7 +32,7 @@ MAPS.update(maps3)
 
 # Chỉ thay khi các vần trên không có q đứng trước và nó cũng là phần kết thúc của từ.
 # Không thay nếu sau vần trên là ký tự tăng tốc [&_].
-PAT_DAUKIEUMOI = re.compile(r'(?<!q)(%s)(?![a-zA-Z&_])' % '|'.join(MAPS.keys()), re.I)
+PAT_DAUKIEUMOI = re.compile(r'(?<![q&_])(%s)(?![a-zA-Z&_])' % '|'.join(MAPS.keys()), re.I)
 
 def sub_kieucu(match):
     s = match.group(1)
