@@ -49,7 +49,10 @@ if [[ ! -f ~/$db ]]; then
 		status INTEGER REFERENCES status(id) DEFAULT 0,
 		start TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 		end TIMESTAMP DEFAULT 0
-	);"
+	);
+	INSERT INTO "status" VALUES(0,'Chua xu ly','Nhung cong viec chua xu ly');
+	INSERT INTO "status" VALUES(1,'Da xu ly','Nhung cong viec da xu ly');
+	INSERT INTO "status" VALUES(2,'Huy bo','Nhung cong viec bi bai bo');"
 	exit
 fi
 
