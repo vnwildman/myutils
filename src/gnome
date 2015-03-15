@@ -22,6 +22,7 @@ usage() {
 	-i	browser git repo on git.debian.org
 	-g	add 'git' repo using git:// protocol
 	-G	browser GNOME directory in Nautilus
+	-T	translate vi.po with gTranslator
 	-u	browser on github.com
 	-U	merge vi.po with POT file at the same directory
 	-w	wizard
@@ -64,7 +65,7 @@ if [[ "$#" -lt "1" ]]; then
 	usage
 fi
 
-while getopts "f:b:t:s:p:i:g:Gu:Uw:W:m:hH" opt; do
+while getopts "f:b:t:Ts:p:i:g:Gu:Uw:W:m:hH" opt; do
   case $opt in
     f)
       firefox https://packages.debian.org/sid/$OPTARG &
@@ -91,6 +92,13 @@ while getopts "f:b:t:s:p:i:g:Gu:Uw:W:m:hH" opt; do
     ;;
     G)
       nautilus $projectdir &
+      ;;
+    T)
+      if [[ -f vi.po ]]; then
+      	gtranslator vi.po &
+      else
+      	gtranslator *.vi.po &
+      fi
       ;;
     u)
       firefox https://github.com/GNOME/$OPTARG/ &
