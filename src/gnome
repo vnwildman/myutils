@@ -16,8 +16,8 @@ usage() {
 	OPTION is:
 	-f	browser Debian sid package
 	-b	report bug
-	-t	download pot file from master branch
-	-s	download pot file from stable branch
+	-t	download and merge pot file from master branch
+	-s	download and merge pot file from stable branch
 	-p	download po file from master branch
 	-i	browser git repo on git.debian.org
 	-g	add 'git' repo using git:// protocol
@@ -35,8 +35,7 @@ Project infomations:
 
 # Copyright © $(date +%Y) GNOME i18n Project for Vietnamese.
 # This file is distributed under the same license as the PACKAGE package.
-Vietnamese <gnome-vi-list@gnome.org>
-Nhóm Việt hóa GNOME (https://l10n.gnome.org/teams/vi/)
+Nhóm dịch GNOME <gnome-vi-list@gnome.org>
 
 Git:
  * git://git.gnome.org/PACKAGE
@@ -46,7 +45,7 @@ Git:
 }
 
 # define stable branch
-stable='gnome-3-14'
+stable='gnome-3-16'
 projectdir='/mnt/E/MyProjects/GNOME'
 
 # get parent dir
@@ -77,6 +76,7 @@ while getopts "f:b:t:Ts:p:i:g:Gu:Uw:W:m:hH" opt; do
       ;;
     s)
       wget --timestamping https://l10n.gnome.org/POT/$OPTARG.$stable/$OPTARG.$stable.pot
+      msgmerge --verbose --update vi.po $OPTARG.$stable.pot
       ;;
     p)
       wget --timestamping https://l10n.gnome.org/POT/$OPTARG.master/$OPTARG.master.vi.po
