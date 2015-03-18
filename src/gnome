@@ -67,7 +67,7 @@ fi
 while getopts "f:b:t:Ts:p:i:g:Gu:Uw:W:m:hH" opt; do
   case $opt in
     f)
-      firefox https://packages.debian.org/sid/$OPTARG &
+      /usr/bin/x-www-browser https://packages.debian.org/sid/$OPTARG
       ;;
     t)
       rm -v *.pot *~
@@ -82,10 +82,10 @@ while getopts "f:b:t:Ts:p:i:g:Gu:Uw:W:m:hH" opt; do
       wget --timestamping https://l10n.gnome.org/POT/$OPTARG.master/$OPTARG.master.vi.po
       ;;
     b)
-      firefox https://bugzilla.gnome.org/enter_bug.cgi?product=$OPTARG &
+      /usr/bin/x-www-browser https://bugzilla.gnome.org/enter_bug.cgi?product=$OPTARG
       ;;
     i)
-      firefox https://git.gnome.org/browse/$OPTARG/ &
+      /usr/bin/x-www-browser https://git.gnome.org/browse/$OPTARG/
       ;;
     g)
       git remote add git git://git.gnome.org/$OPTARG && git fetch git
@@ -101,7 +101,7 @@ while getopts "f:b:t:Ts:p:i:g:Gu:Uw:W:m:hH" opt; do
       fi
       ;;
     u)
-      firefox https://github.com/GNOME/$OPTARG/ &
+      /usr/bin/x-www-browser https://github.com/GNOME/$OPTARG/
       ;;
     U)
       if [[ -f vi.po ]]; then
@@ -114,13 +114,13 @@ while getopts "f:b:t:Ts:p:i:g:Gu:Uw:W:m:hH" opt; do
       wz $OPTARG
       ;;
     W)
-      firefox https://wiki.gnome.org/Apps/$OPTARG &
+      /usr/bin/x-www-browser https://wiki.gnome.org/Apps/$OPTARG
       ;;
     m)
-      firefox https://l10n.gnome.org/module/$OPTARG &
+      /usr/bin/x-www-browser https://l10n.gnome.org/module/$OPTARG
       ;;
     H)
-	  firefox https://l10n.gnome.org/teams/vi/ &
+	  /usr/bin/x-www-browser https://l10n.gnome.org/teams/vi/
       ;;
     h|*)
 	usage
