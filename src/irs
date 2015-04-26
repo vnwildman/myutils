@@ -1,0 +1,16 @@
+#!/bin/bash
+usage() {
+	echo "Image resize"
+	echo "Usage: $0 FILE"
+	exit -1
+}
+if [ $# -eq 0 ] ; then
+	usage
+fi
+
+resizefile="$1.jpg"
+
+if [[ ! -f "$resizefile" ]]; then
+	convert "$1" -resize 25% -quality 70 "$resizefile"
+fi
+
