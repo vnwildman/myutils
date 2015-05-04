@@ -7,6 +7,7 @@ dist_bin_SCRIPTS = \
 					gnome \
 					ubk \
 					mydic \
+					notes \
 					xrp \
 					hidden \
 					tong \

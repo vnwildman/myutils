@@ -1,0 +1,38 @@
+#!/bin/bash
+
+usage() {
+	echo "This is a notes manager
+	usage: $0 OPTION
+	OPTION is:
+	-l	list all notes
+	-v	view notes
+	-e	edit note
+	-h	help"
+	exit;
+}
+
+if [[ "$#" -lt "1" ]]; then
+	usage
+fi
+configdir=~/.notes
+
+while getopts "lv:e:h" opt; do
+  case $opt in
+    l)
+      ls $configdir
+      exit;
+      ;;
+    v)
+      more $configdir/$OPTARG
+      exit;
+      ;;
+    e)
+      nano $configdir/$OPTARG
+      exit;
+      ;;
+    h|*)
+	usage
+      ;;
+  esac
+done
+
