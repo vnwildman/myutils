@@ -8,9 +8,13 @@ if [ $# -eq 0 ] ; then
 	usage
 fi
 
+# Name of resize file will append .jpg. It can't prepend because
+# it false if filename contain dir
 resizefile="$1.jpg"
 
-if [[ ! -f "$resizefile" ]]; then
+if [[ -f "$resizefile" ]]; then
+	echo "Ready resize! Ignore."
+else
 	convert "$1" -resize 25% -quality 70 "$resizefile"
 fi
 
