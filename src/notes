@@ -15,6 +15,9 @@ if [[ "$#" -lt "1" ]]; then
 	usage
 fi
 configdir=~/.notes
+if [[ ! -d "$configdir" ]]; then
+	mkdir -v $configdir
+fi
 
 while getopts "lv:e:h" opt; do
   case $opt in

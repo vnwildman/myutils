@@ -30,18 +30,7 @@ usage() {
 	-m	go to module page
 	-H	go to Homepage
 	-h	help
-
-Project infomations:
-
-# Copyright © $(date +%Y) GNOME i18n Project for Vietnamese.
-# This file is distributed under the same license as the PACKAGE package.
-Nhóm dịch GNOME <gnome-vi-list@gnome.org>
-
-Git:
- * git://git.gnome.org/PACKAGE
- * ssh://git.gnome.org/git/PACKAGE
 "
-	exit;
 }
 
 # define stable branch
@@ -62,6 +51,7 @@ getdir () {
 
 if [[ "$#" -lt "1" ]]; then
 	usage
+	exit;
 fi
 
 while getopts "f:b:t:Ts:p:i:g:Gu:Uw:W:m:hH" opt; do
@@ -124,6 +114,7 @@ while getopts "f:b:t:Ts:p:i:g:Gu:Uw:W:m:hH" opt; do
       ;;
     h|*)
 	usage
+	exit;
       ;;
   esac
 done
