@@ -5,16 +5,17 @@ dist_bin_SCRIPTS = \
 					daucau2.py \
 					fp \
 					gnome \
-					ubk \
+					hidden \
+					irs \
 					mydic \
 					notes \
-					xrp \
-					hidden \
+					sites-manager \
 					tong \
 					tm \
+					ubk \
 					ud \
 					vnconv \
-					irs
+					xrp
 
 seddir = $(docdir)/xrp
 sed_DATA = QUOTES.old QUOTES.new moi_cu

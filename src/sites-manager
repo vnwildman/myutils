@@ -1,0 +1,57 @@
+#!/bin/bash
+
+usage() {
+	echo "usage:
+	$0 OPTION
+	OPTION is:
+	-l	list available sites
+	-L	list enable sites
+	-e	enable a site
+	-d	disable a site
+	-a	add new site
+	-r	remove a site
+	-h	help
+"
+}
+
+if [[ -f /etc/default/sites-manager ]]; then
+	. /etc/default/sites-manager
+else
+	AVAILABLEDIR=/etc/nginx/sites-available
+	ENABLEDIR=/etc/nginx/sites-enabled
+fi
+
+if [[ "$#" -lt "1" ]]; then
+	usage
+	exit;
+fi
+
+while getopts "lLe:d:a:r:h" opt; do
+  case $opt in
+    l)
+      ls $AVAILABLEDIR;
+      exit;
+      ;;
+    L)
+      ls $ENABLEDIR;
+      exit;
+      ;;
+    e)
+      ln -sv $AVAILABLEDIR/$OPTARG $ENABLEDIR
+      ;;
+    d)
+      rm -v $ENABLEDIR/$OPTARG
+      ;;
+    a)
+      nano $AVAILABLEDIR/$OPTARG
+      ;;
+    r)
+      rm -iv $AVAILABLEDIR/$OPTARG
+      ;;
+    h|*)
+	usage
+	exit;
+      ;;
+  esac
+done
+
