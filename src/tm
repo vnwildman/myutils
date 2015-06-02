@@ -1,54 +1,53 @@
 #!/bin/bash
 
 usage() {
-	echo "A simple Task Manager
+  echo "A simple Task Manager
 usage:
-	$0 OPTIONS
-	OPTIONS are:
-	-n		name
-	-d		descripton
-	-v		verbose mode
-	-l LIMIT 	Limit item
-	-u		view Unfinished task
-	-i		view fInished task
-	-a		view All task
-	-f ID		task is done
-	-c ID		Cancel a task
-	-b FILE		Backup database
-	-h		help
+  $0 OPTIONS
+  OPTIONS are:
+  -n        name
+  -d        descripton
+  -v    	verbose mode
+  -l LIMIT  Limit item
+  -u    	view Unfinished task
+  -i    	view fInished task
+  -a    	view All task
+  -f ID     task is done
+  -c ID     Cancel a task
+  -b FILE   Backup database
+  -h        Help
 Power by <http://sqlite.org>"
 }
 
 backup(){
-	sqlite3 ~/$db .dump > $1
+  sqlite3 ~/$db .dump > $1
 }
 
 # define database name
 db='tasks.db3'
 # if database isn't esit, cretate it
 if [[ ! -f ~/$db ]]; then
-	sqlite3 ~/$db "
-	CREATE TABLE status (
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		name TEXT NOT NULL,
-		comment TEXT NULL
-	);
-	CREATE TABLE tasks (
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		name TEXT NOT NULL,
-		comment TEXT NOT NULL,
-		status INTEGER REFERENCES status(id) DEFAULT 0,
-		start TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-		end TIMESTAMP DEFAULT 0
-	);
-	INSERT INTO "status" VALUES(0,'Chưa xử lý','Những công việc chưa xử lý');
-	INSERT INTO "status" VALUES(1,'Đã xử lý','Công việc đã được xử lý xong');
-	INSERT INTO "status" VALUES(2,'Hủy bỏ','Công việc bị bãi bỏ');"
-	exit
+  sqlite3 ~/$db "
+  CREATE TABLE tasks (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    comment TEXT NOT NULL,
+    status INTEGER DEFAULT 0 REFERENCES status(id) ON UPDATE CASCADE ON DELETE SET DEFAULT,
+    start TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    end TIMESTAMP DEFAULT 0
+  );
+  CREATE TABLE status (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    comment TEXT NULL
+  );
+  INSERT INTO "status" VALUES(0,'Chưa xử lý','Những công việc chưa xử lý');
+  INSERT INTO "status" VALUES(1,'Đã xử lý','Công việc đã được xử lý xong');
+  INSERT INTO "status" VALUES(2,'Hủy bỏ','Công việc bị bãi bỏ');"
 fi
 
 if [[ "$#" -lt "1" ]]; then
-	usage
+  usage
 fi
 
 limit=''
@@ -70,37 +69,43 @@ while getopts "vn:d:l:uiaf:c:b:h" opt; do
       ;;
     u)
       sqlite3 $verbose ~/$db "SELECT T.id,T.name,T.comment,datetime(start,'localtime') AS start FROM tasks AS T INNER JOIN status AS S ON T.status = S.id WHERE status=0 AND end=0 $limit;" | more
+      break
       ;;
     i)
-      sqlite3 $verbose ~/$db "SELECT T.id,T.name,T.comment,datetime(start,'localtime') AS start ,datetime(end,'localtime') AS end FROM tasks AS T INNER JOIN status AS S ON T.status = S.id WHERE status=1 ORDER BY end $limit;" | more
+      sqlite3 $verbose ~/$db "SELECT T.id,T.name,T.comment,datetime(start,'localtime') AS start,datetime(end,'localtime') AS end FROM tasks AS T INNER JOIN status AS S ON T.status = S.id WHERE status=1 ORDER BY end $limit;" | more
+      break
       ;;
     a)
-      sqlite3 $verbose ~/$db "SELECT T.id,T.name,T.comment,S.name AS status,start,end FROM tasks AS T INNER JOIN status AS S ON T.status = S.id $limit;" | more
+      sqlite3 $verbose ~/$db "SELECT T.id,T.name,T.comment,S.name AS status,datetime(start,'localtime') AS start ,datetime(end,'localtime') AS end FROM tasks AS T INNER JOIN status AS S ON T.status = S.id $limit;" | more
+      break
       ;;
     f)
-      sqlite3 ~/$db "UPDATE tasks SET status=1 , end=CURRENT_TIMESTAMP WHERE id = '$OPTARG' AND end=0;"
-      sqlite3 -line ~/$db  "SELECT T.id,T.name,T.comment,datetime(start,'localtime') AS start ,datetime(end,'localtime') AS end FROM tasks AS T INNER JOIN status AS S ON T.status = S.id WHERE id = '$OPTARG';"
+      sqlite3 -line ~/$db "UPDATE tasks SET status=1 , end=CURRENT_TIMESTAMP WHERE id = '$OPTARG' AND end=0;
+    SELECT T.id,T.name,T.comment,datetime(start,'localtime') AS start,datetime(end,'localtime') AS end FROM tasks AS T INNER JOIN status AS S ON T.status = S.id WHERE T.id = '$OPTARG';"
+      break
       ;;
     c)
-      sqlite3 ~/$db "UPDATE tasks SET status=2 , end=CURRENT_TIMESTAMP WHERE id = '$OPTARG' AND end=0;"
-      sqlite3 -line ~/$db "SELECT T.id,T.name,T.comment,datetime(start,'localtime') AS start ,datetime(end,'localtime') AS end FROM tasks AS T INNER JOIN status AS S ON T.status = S.id WHERE id = '$OPTARG';"
+      sqlite3 -line ~/$db "UPDATE tasks SET status=2 , end=CURRENT_TIMESTAMP WHERE id = '$OPTARG' AND end=0;
+    SELECT T.id,T.name,T.comment,datetime(start,'localtime') AS start FROM tasks AS T INNER JOIN status AS S ON T.status = S.id WHERE T.id = '$OPTARG';"
+      break
       ;;
     b)
       backup $OPTARG
+      break
       ;;
     h|*)
-	usage
-	exit;
+      usage
+      exit;
       ;;
   esac
 done
 
 if [[ ! -z "$name" && ! -z "$des" ]]; then
-	sqlite3 ~/$db "INSERT INTO tasks (name,comment) VALUES ('$name','$des');"
-	sqlite3 -line ~/$db "SELECT T.id,T.name,T.comment,datetime(start,'localtime') AS start ,datetime(end,'localtime') AS end FROM tasks AS T INNER JOIN status AS S ON T.status = S.id WHERE id = last_insert_rowid();"
+  sqlite3 -line ~/$db "INSERT INTO tasks (name,comment) VALUES ('$name','$des');
+    SELECT T.id,T.name,T.comment,datetime(start,'localtime') AS start,datetime(end,'localtime') AS end FROM tasks AS T INNER JOIN status AS S ON T.status = S.id WHERE T.id = last_insert_rowid();"
 elif [[ -z "$name" && -z "$des" ]]; then
-	exit;
+  exit;
 else
-	echo "You have to set value for both name and description"
+  echo "You have to set value for both name and description"
 fi
 
