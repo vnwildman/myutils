@@ -34,7 +34,7 @@ usage() {
 }
 
 # define stable branch
-stable='gnome-3-16'
+stable='gnome-3-18'
 projectdir='/mnt/E/MyProjects/GNOME'
 
 # get parent dir

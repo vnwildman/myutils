@@ -7,6 +7,7 @@ usage() {
 	-l	list all notes
 	-v	view notes
 	-e	edit note
+	-b  backup
 	-h	help"
 	exit;
 }
@@ -19,7 +20,7 @@ if [[ ! -d "$configdir" ]]; then
 	mkdir -v $configdir
 fi
 
-while getopts "lv:e:h" opt; do
+while getopts "lv:e:bh" opt; do
   case $opt in
     l)
       ls $configdir
@@ -31,6 +32,10 @@ while getopts "lv:e:h" opt; do
       ;;
     e)
       nano $configdir/$OPTARG
+      exit;
+      ;;
+    b)
+      tar -cjvf notes-$(date +%F).tar.bz2 $configdir
       exit;
       ;;
     h|*)
