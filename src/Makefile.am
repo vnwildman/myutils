@@ -1,6 +1,5 @@
 dist_bin_SCRIPTS = \
 					apt-repo \
-					bk \
 					daucau.py \
 					daucau2.py \
 					fp \
