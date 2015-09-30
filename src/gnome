@@ -26,9 +26,9 @@ usage() {
 	-u	browser on github.com
 	-U	merge vi.po with POT file at the same directory
 	-w	wizard
-	-W	go to Wiki of package
+	-P	go to project page (Wiki)
 	-m	go to module page
-	-H	go to Homepage
+	-H	go to GNOME translate Homepage
 	-h	help
 "
 }
@@ -54,7 +54,7 @@ if [[ "$#" -lt "1" ]]; then
 	exit;
 fi
 
-while getopts "f:b:t:Ts:p:i:g:Gu:Uw:W:m:hH" opt; do
+while getopts "f:b:t:Ts:p:i:g:Gu:Uw:P:m:hH" opt; do
   case $opt in
     f)
       /usr/bin/x-www-browser https://packages.debian.org/sid/$OPTARG
@@ -103,8 +103,8 @@ while getopts "f:b:t:Ts:p:i:g:Gu:Uw:W:m:hH" opt; do
     w)
       wz $OPTARG
       ;;
-    W)
-      /usr/bin/x-www-browser https://wiki.gnome.org/Apps/$OPTARG
+    P)
+      /usr/bin/x-www-browser http://projects.gnome.org/$OPTARG/
       ;;
     m)
       /usr/bin/x-www-browser https://l10n.gnome.org/module/$OPTARG
