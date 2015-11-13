@@ -4,7 +4,7 @@
 # Trần Ngọc Quân <vnwildman@gmail.com>, 2014-2015.
 
 import re
-from sys import argv
+from sys import argv, stdin
 
 MAPS = {
     'uỳ': 'ùy',
@@ -42,8 +42,11 @@ def daukieucu(input_str):
     return PAT_DAUKIEUMOI.sub(sub_kieucu, input_str)
 
 if __name__ == '__main__':
-    script, filename = argv
-    fd = open(filename, 'r')
+    if argv.__len__() == 1:
+        fd = stdin
+    else:
+        filename = argv[1]
+        fd = open(filename, 'r')
     for line in fd:
         print(daukieucu(line), end="")
     fd.close()
