@@ -5,7 +5,9 @@ usage (){
 	echo $0 [[domain] [file.po]]
 	exit
 }
-po=$(ls *vi.po)
+
+[[ -f "vi.po" ]] && po='vi.po' || po=$(ls *vi.po)
+
 case "$#" in
 	0 )  if [[ $(basename `pwd`) != "po" ]]; then pkgname=$(basename `pwd`); else usage; fi;;
 	1 )  pkgname=$1;;
@@ -18,3 +20,4 @@ msgattrib --obsolete $po > t.o
 msgcat t.t t.o > t.po
 msgfmt --statistics --verbose --check -o $mo t.po
 rm -v t.t t.o t.po
+
