@@ -1,10 +1,10 @@
 #!/bin/bash
 
 wz() {
-	git clone "git://git.gnome.org/$1"
+	git clone "https://gitlab.gnome.org/GNOME/$1.git"
 	cd $1
-	git remote set-url origin "ssh://git.gnome.org/git/$1";
-	git remote add git git://git.gnome.org/$1 && git fetch git
+	git remote set-url origin "git@gitlab.gnome.org:GNOME/$1.git";
+	git remote add git "https://gitlab.gnome.org/GNOME/$1.git" && git fetch git
 	cd po
 	gnome -t $1
 	exit;
@@ -34,7 +34,7 @@ usage() {
 }
 
 # define stable branch
-stable='gnome-3-22'
+stable='gnome-3-30'
 projectdir='/mnt/E/MyProjects/GNOME'
 
 # get parent dir
@@ -78,7 +78,7 @@ while getopts "f:b:t:Ts:p:i:g:Gu:Uw:P:m:hH" opt; do
       /usr/bin/x-www-browser https://git.gnome.org/browse/$OPTARG/
       ;;
     g)
-      git remote add git git://git.gnome.org/$OPTARG && git fetch git
+      git remote add git https://gitlab.gnome.org/GNOME/$OPTARG.git && git fetch git
     ;;
     G)
       nautilus $projectdir &
